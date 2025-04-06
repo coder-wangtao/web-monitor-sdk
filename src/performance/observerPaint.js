@@ -1,4 +1,6 @@
-export function observerPaint() {
+import { lazyReportBatch } from "../report";
+
+export default function observerPaint() {
   const entryHandler = (list) => {
     for (const entry of list.getEntries()) {
       if (entry.name === "first-paint") {
@@ -12,6 +14,7 @@ export function observerPaint() {
           pageUrl: window.location.href,
         };
         //发送数据
+        lazyReportBatch(reportData);
       }
     }
   };

@@ -1,3 +1,4 @@
+import { lazyReportBatch } from "../report";
 const originalFetch = window.fetch;
 
 function overwriteFetch() {
@@ -16,9 +17,10 @@ function overwriteFetch() {
         reportData.endTime = endTime;
         reportData.duration = endTime - startTime;
         const data = res.clone();
-        reportData.status = res.status;
-        reportData.success = res.ok;
+        reportData.status = data.status;
+        reportData.success = data.ok;
         //todo
+        lazyReportBatch(reportData);
         return res;
       })
       .catch((err) => {
@@ -27,6 +29,7 @@ function overwriteFetch() {
         reportData.duration = endTime - startTime;
         reportData.status = 0;
         reportData.success = false;
+        lazyReportBatch(reportData);
         //todo
       });
   };

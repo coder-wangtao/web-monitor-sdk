@@ -1,3 +1,5 @@
+import { lazyReportBatch } from "../report";
+
 export default function error() {
   //捕获资源加载失败的错误：js css img
   window.addEventListener(
@@ -17,6 +19,7 @@ export default function error() {
           pageUrl: window.location.href,
           paths: e.path,
         };
+        lazyReportBatch(reportData);
       }
     },
     true
@@ -35,15 +38,21 @@ export default function error() {
       pageUrl: window.location.href,
       startTime: performance.now(),
     };
+    lazyReportBatch(reportData);
   };
 
-  window.addEventListener("unhandledrejection", function (e) {
-    const reportData = {
-      type: "error",
-      subType: "promise",
-      msg: e.reason?.stack,
-      pageUrl: window.location.href,
-      startTime: e.timeStamp,
-    };
-  });
+  window.addEventListener(
+    "unhandledrejection",
+    function (e) {
+      const reportData = {
+        type: "error",
+        subType: "promise",
+        msg: e.reason?.stack,
+        pageUrl: window.location.href,
+        startTime: e.timeStamp,
+      };
+      lazyReportBatch(reportData);
+    },
+    true
+  );
 }

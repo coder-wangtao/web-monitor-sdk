@@ -1,14 +1,16 @@
+import { lazyReportBatch } from "../report";
+
 export default function observerEntries() {
   if (document.readyState === "complete") {
     observeEvent();
   } else {
     const onLoad = () => {
       observeEvent();
-      window.addEventListener("load", onLoad, true);
+      window.removeEventListener("load", onLoad, true);
     };
-    window.removeEventListener("load", onLoad, true);
+    window.addEventListener("load", onLoad, true);
   }
-} 
+}
 
 export function observeEvent() {
   const entryHandler = (list) => {
@@ -31,6 +33,7 @@ export function observeEvent() {
         protocol: entry.nextHopProtocol, //请求协议
         responseBodySize: entry.encodedBodySize, //相应内容大小
       };
+      lazyReportBatch(reportData);
     }
   };
 

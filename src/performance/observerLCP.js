@@ -1,4 +1,6 @@
-export function observerLCP() {
+import { lazyReportBatch } from "../report";
+
+export default function observerLCP() {
   const entryHandler = (list) => {
     if (observer) {
       observer.disconnect();
@@ -14,6 +16,7 @@ export function observerLCP() {
         pageUrl: window.location.href,
       };
       //发送数据
+      lazyReportBatch(reportData);
     }
   };
 
