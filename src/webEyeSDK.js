@@ -51,6 +51,7 @@ export function init(options) {
   behavior();
   performance();
 }
+
 export default {
   install,
   errorBoundary,
